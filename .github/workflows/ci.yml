@@ -29,7 +29,7 @@ jobs:
         run: dotnet build --no-restore -c Release
 
       - name: Run Tests
-        run: dotnet test --no-build -v normal
+        run: dotnet test --no-build -c Release -v normal
 
       - name: Build Docker Image
         run: docker build . -t taskmanager-backend:latest
