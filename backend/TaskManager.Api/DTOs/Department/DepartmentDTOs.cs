@@ -1,4 +1,4 @@
-namespace TaskManager.Api.DTOs;
+namespace TaskManager.Api.DTOs.Department;
 
 public class DepartmentResponse
 {
