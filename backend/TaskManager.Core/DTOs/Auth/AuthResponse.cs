@@ -1,8 +1,8 @@
 namespace TaskManager.Core.DTOs.Auth;
 
-public class AuthResponseDto
+public class AuthResponse
 {
     public string Token { get; set; } = string.Empty;
     public DateTime Expiration { get; set; }
-    public UserDto User { get; set; } = null!;
+    public UserResponse User { get; set; } = null!;
 }

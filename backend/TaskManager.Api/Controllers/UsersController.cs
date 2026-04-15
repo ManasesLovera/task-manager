@@ -20,10 +20,10 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers()
     {
         var users = await _userManager.Users.ToListAsync();
-        var userDtos = users.Select(user => new UserDto
+        var userDtos = users.Select(user => new UserResponse
         {
             Id = user.Id,
             Email = user.Email!,
@@ -36,7 +36,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserDto>> GetUser(string id)
+    public async Task<ActionResult<UserResponse>> GetUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
@@ -44,7 +44,7 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        return Ok(new UserDto
+        return Ok(new UserResponse
         {
             Id = user.Id,
             Email = user.Email!,
@@ -55,7 +55,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPatch("{id}/role")]
-    public async Task<IActionResult> UpdateRole(string id, [FromBody] UpdateUserRoleDto request)
+    public async Task<IActionResult> UpdateRole(string id, [FromBody] UpdateUserRole request)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)

@@ -66,7 +66,7 @@ public class UsersIntegrationTests : IClassFixture<WebApplicationFactory<Program
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var users = await response.Content.ReadFromJsonAsync<IEnumerable<UserDto>>();
+        var users = await response.Content.ReadFromJsonAsync<IEnumerable<UserResponse>>();
         Assert.NotNull(users);
         Assert.True(users.Count() >= 2);
     }

@@ -28,7 +28,7 @@ public class AuthControllerTests
     public async Task Register_ShouldReturnOk_WhenSuccessful()
     {
         // Arrange
-        var request = new RegisterRequestDto
+        var request = new RegisterRequest
         {
             Email = "new@example.com",
             Password = "Password123!",
@@ -49,7 +49,7 @@ public class AuthControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var response = Assert.IsType<AuthResponseDto>(okResult.Value);
+        var response = Assert.IsType<AuthResponse>(okResult.Value);
         Assert.Equal("mock-token", response.Token);
         Assert.Equal(request.Email, response.User.Email);
     }
@@ -58,7 +58,7 @@ public class AuthControllerTests
     public async Task Login_ShouldReturnOk_WhenSuccessful()
     {
         // Arrange
-        var request = new LoginRequestDto
+        var request = new LoginRequest
         {
             Email = "test@example.com",
             Password = "Password123!"
@@ -82,7 +82,7 @@ public class AuthControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var response = Assert.IsType<AuthResponseDto>(okResult.Value);
+        var response = Assert.IsType<AuthResponse>(okResult.Value);
         Assert.Equal("mock-token", response.Token);
         Assert.Equal(request.Email, response.User.Email);
     }
@@ -91,7 +91,7 @@ public class AuthControllerTests
     public async Task Login_ShouldReturnUnauthorized_WhenUserInactive()
     {
         // Arrange
-        var request = new LoginRequestDto { Email = "inactive@example.com", Password = "password" };
+        var request = new LoginRequest { Email = "inactive@example.com", Password = "password" };
         var user = new ApplicationUser { Email = request.Email, IsActive = false };
         _mockUserManager.Setup(x => x.FindByEmailAsync(request.Email)).ReturnsAsync(user);
 

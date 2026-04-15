@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Core.DTOs.Auth;
@@ -19,8 +20,34 @@ public class AuthController : ControllerBase
         _tokenService = tokenService;
     }
 
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<IActionResult> GetMe()
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        return Ok(new UserResponse
+        {
+            Id = user.Id,
+            Email = user.Email!,
+            FullName = user.FullName,
+            Role = user.Role.ToString(),
+            IsActive = user.IsActive
+        });
+    }
+
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         var user = new ApplicationUser
         {
@@ -41,11 +68,11 @@ public class AuthController : ControllerBase
 
         var (token, expiration) = await _tokenService.GenerateTokenAsync(user);
 
-        return Ok(new AuthResponseDto
+        return Ok(new AuthResponse
         {
             Token = token,
             Expiration = expiration,
-            User = new UserDto
+            User = new UserResponse
             {
                 Id = user.Id,
                 Email = user.Email!,
@@ -57,7 +84,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null || !user.IsActive)
@@ -73,11 +100,11 @@ public class AuthController : ControllerBase
 
         var (token, expiration) = await _tokenService.GenerateTokenAsync(user);
 
-        return Ok(new AuthResponseDto
+        return Ok(new AuthResponse
         {
             Token = token,
             Expiration = expiration,
-            User = new UserDto
+            User = new UserResponse
             {
                 Id = user.Id,
                 Email = user.Email!,

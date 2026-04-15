@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Infrastructure;
@@ -8,6 +9,7 @@ namespace TaskManager.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DepartmentsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -16,6 +18,7 @@ public class DepartmentsController : ControllerBase
         => _context = context;
 
     // GET /api/departments
+    // Available to all authenticated users
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -30,7 +33,9 @@ public class DepartmentsController : ControllerBase
     }
 
     // POST /api/departments
+    // Restricted to Admin only
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateDepartmentRequest req)
     {
         var department = new Department { Name = req.Name, Code = req.Code };
@@ -41,11 +46,21 @@ public class DepartmentsController : ControllerBase
     }
 
     // DELETE /api/departments/{id}
+    // Restricted to Admin only
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var department = await _context.Departments.FindAsync(id);
         if (department == null) return NotFound();
+        
+        // Optional: Check if department has tickets before deleting
+        var hasTickets = await _context.Tickets.AnyAsync(t => t.DepartmentId == id);
+        if (hasTickets)
+        {
+            return BadRequest("Cannot delete department because it has associated tickets.");
+        }
+
         _context.Departments.Remove(department);
         await _context.SaveChangesAsync();
         return NoContent();

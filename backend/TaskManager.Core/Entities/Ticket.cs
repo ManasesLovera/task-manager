@@ -26,9 +26,19 @@ public class Ticket
     public Guid DepartmentId { get; set; }
 
     /// <summary>
+    /// Gets or sets the department responsible for this ticket.
+    /// </summary>
+    public virtual Department? Department { get; set; }
+
+    /// <summary>
     /// Gets or sets the ID of the user who created the ticket.
     /// </summary>
     public required string CreatorId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the user who created the ticket.
+    /// </summary>
+    public virtual ApplicationUser? Creator { get; set; }
 
     /// <summary>
     /// Gets or sets the current status of the ticket.
@@ -49,6 +59,11 @@ public class Ticket
     /// Gets or sets the ID of the technician assigned to or who resolved the ticket.
     /// </summary>
     public string? TechnicianId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the technician assigned to or who resolved the ticket.
+    /// </summary>
+    public virtual ApplicationUser? Technician { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when the ticket was resolved.

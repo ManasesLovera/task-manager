@@ -22,19 +22,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Department>().HasIndex(d => d.Code).IsUnique();
         
         builder.Entity<Ticket>()
-            .HasOne<Department>()
+            .HasOne(t => t.Department)
             .WithMany()
             .HasForeignKey(t => t.DepartmentId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<Ticket>()
-            .HasOne<ApplicationUser>()
+            .HasOne(t => t.Creator)
             .WithMany()
             .HasForeignKey(t => t.CreatorId)
             .OnDelete(DeleteBehavior.Restrict);
             
         builder.Entity<Ticket>()
-            .HasOne<ApplicationUser>()
+            .HasOne(t => t.Technician)
             .WithMany()
             .HasForeignKey(t => t.TechnicianId)
             .IsRequired(false)

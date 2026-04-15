@@ -39,7 +39,7 @@ public class UsersControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var response = Assert.IsType<UserDto>(okResult.Value);
+        var response = Assert.IsType<UserResponse>(okResult.Value);
         Assert.Equal(userId, response.Id);
     }
 
@@ -49,7 +49,7 @@ public class UsersControllerTests
         // Arrange
         var userId = "user-1";
         var user = new ApplicationUser { Id = userId };
-        var request = new UpdateUserRoleDto { Role = UserRole.Admin };
+        var request = new UpdateUserRole { Role = UserRole.Admin };
         
         _mockUserManager.Setup(x => x.FindByIdAsync(userId)).ReturnsAsync(user);
         _mockUserManager.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(new List<string> { "Member" });

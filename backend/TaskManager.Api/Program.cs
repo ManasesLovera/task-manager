@@ -8,6 +8,7 @@ using TaskManager.Core.Interfaces;
 using TaskManager.Core.Settings;
 using TaskManager.Infrastructure;
 using TaskManager.Infrastructure.Services;
+using TaskManager.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,12 +53,24 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Apply migrations and seed at startup
 using (var scope = app.Services.CreateScope())
@@ -89,6 +102,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
