@@ -2,11 +2,13 @@ namespace TaskManager.Api.DTOs;
 
 public class DepartmentResponse
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
 }
 
 public class CreateDepartmentRequest
 {
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
+    public required string Code { get; set; }
 }
