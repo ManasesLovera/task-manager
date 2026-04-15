@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Infrastructure;
 using TaskManager.Core.Entities;
-using TaskManager.Api.DTOs;
+using TaskManager.Api.DTOs.Department;
 
 namespace TaskManager.Api.Controllers;
 
