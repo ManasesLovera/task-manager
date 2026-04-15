@@ -15,7 +15,7 @@ public class ApplicationUser : IdentityUser
     /// <summary>
     /// Gets or sets the role assigned to the user.
     /// </summary>
-    public UserRole Role { get; set; } = UserRole.User;
+    public UserRole Role { get; set; } = UserRole.Member;
 
     /// <summary>
     /// Gets or sets a value indicating whether the user account is active.

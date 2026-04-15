@@ -7,8 +7,8 @@ public static class DbInitializer
 {
     public static async Task SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
-        // Seed Roles
-        var roles = new[] { UserRole.Admin.ToString(), UserRole.Technician.ToString(), UserRole.User.ToString() };
+        // 1. Seed Roles
+        var roles = new[] { UserRole.Admin.ToString(), UserRole.Technician.ToString(), UserRole.Member.ToString() };
         foreach (var role in roles)
         {
             if (!await roleManager.RoleExistsAsync(role))
@@ -17,25 +17,35 @@ public static class DbInitializer
             }
         }
 
-        // Seed Admin User
-        var adminEmail = "admin@taskmanager.com";
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
-        if (adminUser == null)
+        // 2. Define Default Users
+        var defaultUsers = new List<(string Email, string Name, UserRole Role, string Password)>
         {
-            adminUser = new ApplicationUser
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                FullName = "System Administrator",
-                Role = UserRole.Admin,
-                EmailConfirmed = true,
-                IsActive = true
-            };
+            ("admin@taskmanager.com", "System Administrator", UserRole.Admin, "Admin123!"),
+            ("tech@taskmanager.com", "Default Technician", UserRole.Technician, "Tech123!"),
+            ("member@taskmanager.com", "Standard Member", UserRole.Member, "Member123!")
+        };
 
-            var result = await userManager.CreateAsync(adminUser, "Admin123!");
-            if (result.Succeeded)
+        // 3. Seed Users
+        foreach (var (email, name, role, password) in defaultUsers)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
             {
-                await userManager.AddToRoleAsync(adminUser, UserRole.Admin.ToString());
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    FullName = name,
+                    Role = role,
+                    EmailConfirmed = true,
+                    IsActive = true
+                };
+
+                var result = await userManager.CreateAsync(user, password);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, role.ToString());
+                }
             }
         }
     }
