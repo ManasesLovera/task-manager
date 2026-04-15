@@ -10,7 +10,7 @@ public class ApplicationUser : IdentityUser
     /// <summary>
     /// Gets or sets the full name of the user.
     /// </summary>
-    public required string FullName { get; set; }
+    public string FullName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the role assigned to the user.
