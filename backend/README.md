@@ -74,6 +74,16 @@ The project is organized into several key layers:
     dotnet ef database update --project TaskManager.Infrastructure --startup-project TaskManager.Api
     ```
 
+## Default Credentials
+
+For initial testing and setup, the following default users are seeded:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| Admin | `admin@taskmanager.com` | `Admin123!` |
+| Technician | `tech@taskmanager.com` | `Tech123!` |
+| Member | `member@taskmanager.com` | `Member123!` |
+
 ## How to Run
 
 ### Using .NET CLI
