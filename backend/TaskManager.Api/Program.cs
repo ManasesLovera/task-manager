@@ -10,8 +10,6 @@ using TaskManager.Infrastructure;
 using TaskManager.Infrastructure.Services;
 using TaskManager.Api.Middleware;
 using Scalar.AspNetCore;
-using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,35 +67,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi(options =>
-{
-    options.AddDocumentTransformer((document, context, cancellationToken) =>
-    {
-        document.Info = new OpenApiInfo
-        {
-            Title = "Task Manager API",
-            Version = "v1",
-            Description = "A robust task management backend for the TaskManager system."
-        };
-
-        var scheme = new OpenApiSecurityScheme
-        {
-            Type = SecuritySchemeType.Http,
-            Name = JwtBearerDefaults.AuthenticationScheme,
-            Scheme = JwtBearerDefaults.AuthenticationScheme,
-            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme }
-        };
-
-        document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes.Add(JwtBearerDefaults.AuthenticationScheme, scheme);
-        document.SecurityRequirements.Add(new OpenApiSecurityRequirement
-        {
-            [scheme] = []
-        });
-
-        return Task.CompletedTask;
-    });
-});
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
