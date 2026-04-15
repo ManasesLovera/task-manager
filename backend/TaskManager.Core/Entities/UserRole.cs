@@ -16,7 +16,7 @@ public enum UserRole
     Technician,
 
     /// <summary>
-    /// Standard user who can create tickets.
+    /// Member who can create and view their own tickets.
     /// </summary>
-    User
+    Member
 }
