@@ -27,5 +27,22 @@ export const handlers = [
     );
   }),
 
+  // Tickets Mock
+  http.get(`${API_URL}/Tickets`, () => {
+    return HttpResponse.json([
+      {
+        id: 'ticket-1',
+        title: 'Mock Ticket 1',
+        description: 'Description 1',
+        departmentId: 'dept-1',
+        departmentName: 'IT',
+        creatorId: 'user-1',
+        creatorName: 'John Doe',
+        status: 0, // Open
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+  }),
+
   // Add more handlers as needed
 ];

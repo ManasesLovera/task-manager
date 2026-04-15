@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import LoginView from './Login';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
@@ -13,20 +14,30 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+const createQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
+
 const renderLogin = () => {
   return render(
-    <BrowserRouter>
-      <LoginView />
-    </BrowserRouter>
+    <QueryClientProvider client={createQueryClient()}>
+      <BrowserRouter>
+        <LoginView />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
 describe('LoginView Usability & Design', () => {
-  it('renders all design elements correctly', () => {
+  it('renders all design elements correctly', async () => {
     renderLogin();
     
     // Check for branding
-    expect(screen.getByText('Indigo Slate')).toBeInTheDocument();
+    expect(await screen.findByText('Indigo Slate')).toBeInTheDocument();
     expect(screen.getByText('Welcome back')).toBeInTheDocument();
     
     // Check for form fields
@@ -47,9 +58,7 @@ describe('LoginView Usability & Design', () => {
     
     fireEvent.click(screen.getByRole('button', { name: /Sign In/i }));
     
-    await waitFor(() => {
-      expect(screen.getByText('Invalid credentials')).toBeInTheDocument();
-    });
+    expect(await screen.findByText('Invalid credentials')).toBeInTheDocument();
   });
 
   it('navigates to dashboard on successful login', async () => {
