@@ -22,8 +22,9 @@ public class DepartmentsController : ControllerBase
         var departments = await _context.Departments.ToListAsync();
         var response = departments.Select(d => new DepartmentResponse
         {
-            Id   = d.Id,
-            Name = d.Name
+            Id = d.Id,
+            Name = d.Name,
+            Code = d.Code
         });
         return Ok(response);
     }
@@ -32,16 +33,16 @@ public class DepartmentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateDepartmentRequest req)
     {
-        var department = new Department { Name = req.Name };
+        var department = new Department { Name = req.Name, Code = req.Code };
         _context.Departments.Add(department);
         await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetAll), new { id = department.Id },
-            new DepartmentResponse { Id = department.Id, Name = department.Name });
+            new DepartmentResponse { Id = department.Id, Name = department.Name, Code = department.Code });
     }
 
     // DELETE /api/departments/{id}
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         var department = await _context.Departments.FindAsync(id);
         if (department == null) return NotFound();
