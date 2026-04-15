@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TaskManager.Core.Entities;
 
 namespace TaskManager.Infrastructure;
 
 public static class DbInitializer
 {
-    public static async Task SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public static async Task SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
     {
         // 1. Seed Roles
         var roles = new[] { UserRole.Admin.ToString(), UserRole.Technician.ToString(), UserRole.Member.ToString() };
@@ -47,6 +48,22 @@ public static class DbInitializer
                     await userManager.AddToRoleAsync(user, role.ToString());
                 }
             }
+        }
+
+        // 4. Seed Departments
+        if (!context.Departments.Any())
+        {
+            var departments = new List<Department>
+            {
+                new Department { Name = "Human Resources", Code = "RRHH" },
+                new Department { Name = "Information Technology", Code = "IT" },
+                new Department { Name = "Sales", Code = "SALES" },
+                new Department { Name = "Client Service", Code = "CS" },
+                new Department { Name = "Management", Code = "MGMT" }
+            };
+
+            context.Departments.AddRange(departments);
+            await context.SaveChangesAsync();
         }
     }
 }
