@@ -1,11 +1,11 @@
 import { http, HttpResponse } from 'msw';
 
-const API_URL = 'http://localhost:5000/api'; // Match .env
+const API_URL = 'http://localhost:5294/api'; // Match .env
 
 export const handlers = [
   // Auth Login Mock
   http.post(`${API_URL}/Auth/login`, async ({ request }) => {
-    const { email, password } = (await request.json()) as any;
+    const { email, password } = (await request.json()) as Record<string, string>;
 
     if (email === 'test@example.com' && password === 'Password123!') {
       return HttpResponse.json({

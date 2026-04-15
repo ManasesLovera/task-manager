@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { apiClient } from './apiClient';
 import { useAuthStore } from '../stores/authStore';
 
+import type { AuthResponse } from './types';
+
 describe('apiClient', () => {
   beforeEach(() => {
     useAuthStore.getState().logout();
@@ -23,7 +25,7 @@ describe('apiClient', () => {
   });
 
   it('should successfully post login data', async () => {
-    const data = await apiClient.post<any>('/Auth/login', {
+    const data = await apiClient.post<AuthResponse>('/Auth/login', {
       email: 'test@example.com',
       password: 'Password123!',
     });
