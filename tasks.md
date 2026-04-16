@@ -1,8 +1,8 @@
-# Backend Implementation Tasks
+# Project Tasks
 
-This document outlines the steps to build a fully functional backend for the TaskManager system, following the architecture and requirements defined in the root README.
+This document outlines the tasks for the TaskManager system, including backend implementation and frontend UI/UX improvements.
 
-## Phase 1: Minimal Working Backend (Fastest Path)
+## Phase 1: Minimal Working Backend (Fastest Path) - COMPLETED
 Goal: Get the API running with essential CRUDs and Authentication.
 
 ### 1. Project Infrastructure Setup
@@ -46,7 +46,7 @@ Define the following entities in `TaskManager.Core`:
 
 ---
 
-## Phase 2: Refactoring & Best Practices
+## Phase 2: Refactoring & Best Practices - IN PROGRESS
 Goal: Align with Clean Architecture and enhance maintainability.
 
 ### 1. Folder Structure & DTOs
@@ -68,3 +68,36 @@ Goal: Align with Clean Architecture and enhance maintainability.
 - [x] **Unit Tests**: Existing tests updated to new DTO naming.
 - [x] **Integration Tests**: Existing tests updated.
 - [ ] **New Tests**: Add specific tests for Ticket filtering and resolution logic.
+
+---
+
+## Phase 3: UI/UX & Functional Polish
+Goal: Fix identified issues and implement missing features.
+
+### Authentication & Header
+- [ ] Fix eye button in login (currently does not work).
+- [ ] Replace all occurrences of "Indigo Slate" with "Task Manager".
+- [ ] Improve visibility of username and role next to person icon (currently dark letters on dark background).
+- [ ] Remove notifications symbol in header.
+
+### Dashboard & Navigation
+- [ ] In dashboard, remove 'TaskManager' subtitle and search component.
+- [ ] Remove 'New Ticket' from sidebar (should only be in Dashboard and Ticket view).
+- [ ] Remove 'Queue' field in sidebar (this view won't be implemented).
+- [ ] Add Help Center View (clicks should navigate to a guide on how to use the app).
+
+### Ticket Management
+- [ ] Implement 'Create New Ticket' functionality (show modal with ticket fields per design).
+- [ ] Remove CSAT score.
+- [ ] **Resolution Velocity**:
+  - Create a new endpoint with average resolution time for all tickets.
+  - Logic: If no tickets, don't show the component.
+  - Access: Only show to Admin roles.
+
+### Analytics & User Management
+- [ ] **Analytics View**:
+  - Create controller with valuable information.
+  - Filtering by date range.
+  - Show ticket duration/resolution time.
+  - Technician performance (tickets resolved per range date).
+- [ ] Remove 'Add New User' button.
