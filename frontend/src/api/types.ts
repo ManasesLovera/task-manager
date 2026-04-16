@@ -43,6 +43,14 @@ export const TicketStatus = {
   Resolved: 2 as const,
 };
 
+export type TicketPriorityType = 0 | 1 | 2;
+
+export const TicketPriority = {
+  Low: 0 as const,
+  Medium: 1 as const,
+  High: 2 as const,
+};
+
 export interface TicketResponse {
   id: string;
   title: string;
@@ -52,6 +60,7 @@ export interface TicketResponse {
   creatorId: string;
   creatorName: string;
   status: TicketStatusType;
+  priority: TicketPriorityType;
   createdAt: string;
   solutionDescription?: string;
   technicianId?: string;
@@ -63,6 +72,16 @@ export interface CreateTicketRequest {
   title: string;
   description: string;
   departmentId: string;
+  priority: TicketPriorityType;
+}
+
+export interface UpdateTicketRequest {
+  title?: string;
+  description?: string;
+  departmentId?: string;
+  status?: TicketStatusType;
+  priority?: TicketPriorityType;
+  solutionDescription?: string;
 }
 
 export interface CreateDepartmentRequest {

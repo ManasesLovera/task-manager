@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
 import { useToastStore } from '../../stores/toastStore';
-import type { DepartmentResponse, CreateTicketRequest } from '../../api/types';
+import { TicketPriority } from '../../api/types';
+import type { DepartmentResponse, CreateTicketRequest, TicketPriorityType } from '../../api/types';
 
 interface CreateTicketModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [departmentId, setDepartmentId] = useState('');
+  const [priority, setPriority] = useState<TicketPriorityType>(TicketPriority.Medium);
   const [error, setError] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
@@ -34,6 +36,7 @@ const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, 
       setTitle('');
       setDescription('');
       setDepartmentId('');
+      setPriority(TicketPriority.Medium);
       setError(null);
       if (onSuccess) onSuccess();
       onClose();
@@ -59,7 +62,7 @@ const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, 
       setError('Description must be at least 10 characters');
       return;
     }
-    createTicketMutation.mutate({ title, description, departmentId });
+    createTicketMutation.mutate({ title, description, departmentId, priority });
   };
 
   return (
@@ -115,6 +118,27 @@ const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, 
                     {dept.name}
                   </option>
                 ))}
+              </select>
+              <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
+                expand_more
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="priority" className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+              Priority
+            </label>
+            <div className="relative">
+              <select
+                id="priority"
+                value={priority}
+                onChange={(e) => setPriority(Number(e.target.value) as TicketPriorityType)}
+                className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-on-surface appearance-none"
+              >
+                <option value={TicketPriority.Low}>Low</option>
+                <option value={TicketPriority.Medium}>Medium</option>
+                <option value={TicketPriority.High}>High</option>
               </select>
               <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
                 expand_more

@@ -46,6 +46,11 @@ public class Ticket
     public TicketStatus Status { get; set; } = TicketStatus.Open;
 
     /// <summary>
+    /// Gets or sets the priority level of the ticket.
+    /// </summary>
+    public TicketPriority Priority { get; set; } = TicketPriority.Medium;
+
+    /// <summary>
     /// Gets or sets the date and time when the ticket was created.
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

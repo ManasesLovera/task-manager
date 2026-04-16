@@ -2,8 +2,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
-import { TicketStatus } from '../../api/types';
-import type { TicketResponse, TicketStatusType } from '../../api/types';
+import { TicketStatus, TicketPriority } from '../../api/types';
+import type { TicketResponse, TicketStatusType, TicketPriorityType } from '../../api/types';
 
 const TicketDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,15 +15,28 @@ const TicketDetail: React.FC = () => {
     enabled: !!id,
   });
 
+  const getPriorityInfo = (priority: TicketPriorityType) => {
+    switch (priority) {
+      case TicketPriority.Low:
+        return { label: 'Low Priority', class: 'bg-surface-container text-on-surface-variant' };
+      case TicketPriority.Medium:
+        return { label: 'Medium Priority', class: 'bg-primary-container text-on-primary-container' };
+      case TicketPriority.High:
+        return { label: 'High Priority', class: 'bg-error-container text-on-error-container' };
+      default:
+        return { label: 'Unknown', class: 'bg-gray-100' };
+    }
+  };
+
   const resolveMutation = useMutation({
     mutationFn: (solutionDescription: string) => 
-      apiClient.patch(`/Tickets/${id}/resolve`, { solutionDescription }),
+      apiClient.put(`/Tickets/${id}`, { solutionDescription, status: TicketStatus.Resolved }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['ticket', id] }),
   });
 
   const updateStatusMutation = useMutation({
     mutationFn: (status: TicketStatusType) => 
-      apiClient.patch(`/Tickets/${id}/status`, { status }),
+      apiClient.put(`/Tickets/${id}`, { status }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['ticket', id] }),
   });
 
@@ -37,8 +50,8 @@ const TicketDetail: React.FC = () => {
       <aside className="hidden lg:flex flex-col w-80 bg-surface-container-high border-r border-slate-200/50 p-6 gap-8 shrink-0 overflow-y-auto">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2 py-0.5 bg-primary-container text-on-primary-container text-[10px] font-bold rounded uppercase tracking-wider">
-              {ticket.status === TicketStatus.Open ? 'High Priority' : 'Information'}
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${getPriorityInfo(ticket.priority).class}`}>
+              {getPriorityInfo(ticket.priority).label}
             </span>
             <span className="text-on-surface-variant text-xs font-medium">#TK-{ticket.id.substring(0, 4)}</span>
           </div>

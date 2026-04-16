@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { apiClient } from '../../api/apiClient';
 import type { DashboardAnalyticsResponse, ResolutionVelocityResponse } from '../../api/types';
 import ResolutionVelocity from './ResolutionVelocity';
@@ -14,7 +14,7 @@ const Analytics: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAnalytics = React.useCallback(async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
