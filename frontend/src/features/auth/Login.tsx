@@ -7,6 +7,7 @@ import type { AuthResponse } from '../../api/types';
 const LoginView: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const LoginView: React.FC = () => {
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center atmospheric-shadow">
               <span className="material-symbols-outlined text-on-primary">task_alt</span>
             </div>
-            <span className="font-headline text-2xl font-black tracking-tight text-primary">Indigo Slate</span>
+            <span className="font-headline text-2xl font-black tracking-tight text-primary">Task Manager</span>
           </div>
           <h1 className="font-headline text-3xl font-extrabold tracking-tight text-on-surface mb-2">Welcome back</h1>
           <p className="font-body text-on-surface-variant">Sign in to manage your productivity dashboard</p>
@@ -89,22 +90,26 @@ const LoginView: React.FC = () => {
                 </label>
                 <a className="font-label text-xs font-semibold text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
               </div>
-              <div className="relative">
-                <input
-                  className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline"
-                  id="password"
-                  name="password"
-                  placeholder="••••••••••••"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button">
-                  <span className="material-symbols-outlined text-xl">visibility</span>
-                </button>
-              </div>
+               <div className="relative">
+                 <input
+                   className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline"
+                   id="password"
+                   name="password"
+                   placeholder="••••••••••••"
+                   type={showPassword ? 'text' : 'password'}
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}
+                   required
+                   autoComplete="current-password"
+                 />
+                 <button 
+                   className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" 
+                   type="button"
+                   onClick={() => setShowPassword(!showPassword)}
+                 >
+                   <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                 </button>
+               </div>
             </div>
 
             {/* Options */}
@@ -127,7 +132,7 @@ const LoginView: React.FC = () => {
           {/* Footer Action */}
           <div className="mt-8 pt-6 border-t border-outline-variant/10 text-center">
             <p className="font-body text-sm text-on-surface-variant">
-              New to TaskManager? 
+              New to Task Manager? 
               <a className="font-semibold text-primary hover:text-primary-container transition-colors ml-1" href="#">Request access</a>
             </p>
           </div>

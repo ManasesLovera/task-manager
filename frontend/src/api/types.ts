@@ -47,3 +47,17 @@ export interface CreateTicketRequest {
   description: string;
   departmentId: string;
 }
+
+export interface ResolutionVelocityResponse {
+  averageResolutionTimeHours: number;
+}
+
+export interface TechnicianPerformance {
+  technicianId: string;
+  technicianName: string;
+  resolvedTicketsCount: number;
+}
+
+export interface DashboardAnalyticsResponse {
+  technicianPerformances: TechnicianPerformance[];
+}

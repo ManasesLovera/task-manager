@@ -7,6 +7,7 @@ import TicketQueue from '../features/tickets/TicketQueue';
 import TicketDetail from '../features/tickets/TicketDetail';
 import UserManagement from '../features/users/UserManagement';
 import DepartmentManagement from '../features/departments/DepartmentManagement';
+import AnalyticsView from '../features/analytics/Analytics';
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         path: 'departments',
         element: <DepartmentManagement />,
+      },
+      {
+        path: 'analytics',
+        element: <AnalyticsView />,
       },
     ],
   },

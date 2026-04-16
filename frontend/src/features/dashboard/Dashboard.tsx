@@ -74,18 +74,8 @@ const DashboardView: React.FC = () => {
         </div>
 
         {/* Secondary Stats Stack */}
-        <div className="col-span-12 md:col-span-4 grid grid-rows-2 gap-6">
-          <div className="bg-secondary-container p-6 rounded-2xl flex flex-col justify-between">
-            <div className="flex justify-between items-start">
-              <span className="material-symbols-outlined text-on-secondary-container">verified_user</span>
-              <span className="text-xs font-bold text-on-secondary-container/60 uppercase">CSAT Score</span>
-            </div>
-            <div>
-              <p className="text-3xl font-black text-on-secondary-container">98.2%</p>
-              <p className="text-xs font-medium text-on-secondary-container/80">Industry leading satisfaction</p>
-            </div>
-          </div>
-          <div className="bg-tertiary-fixed p-6 rounded-2xl flex flex-col justify-between">
+        <div className="col-span-12 md:col-span-4 flex flex-col gap-6">
+          <div className="bg-tertiary-fixed p-6 rounded-2xl flex-grow flex flex-col justify-between">
             <div className="flex justify-between items-start">
               <span className="material-symbols-outlined text-on-tertiary-fixed">bolt</span>
               <span className="text-xs font-bold text-on-tertiary-fixed/60 uppercase">Active Tickets</span>

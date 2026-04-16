@@ -31,10 +31,6 @@ const UserManagement: React.FC = () => {
           <h2 className="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">Team Members</h2>
           <p className="text-on-surface-variant max-w-xl leading-relaxed">Manage your organization's workforce, adjust permissions, and monitor active account statuses from a centralized hub.</p>
         </div>
-        <button className="primary-gradient-cta text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl transition-all active:scale-95">
-          <span className="material-symbols-outlined">person_add</span>
-          <span>Add New User</span>
-        </button>
       </div>
 
       {/* Stats Bar (Bento-lite) */}
@@ -93,7 +89,7 @@ const UserManagement: React.FC = () => {
                       </div>
                       <div>
                         <p className="font-bold text-on-surface">{user.fullName}</p>
-                        <p className="text-xs text-on-surface-variant opacity-60">Indig Slate Team</p>
+                        <p className="text-xs text-on-surface-variant opacity-60">Task Manager Team</p>
                       </div>
                     </div>
                   </td>
