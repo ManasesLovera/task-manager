@@ -1,46 +1,34 @@
 # Project Tasks
 
-This document outlines the tasks for the TaskManager system, including backend implementation and frontend UI/UX improvements.
+## Phase 3: UI/UX & Functional Polish (Comprehensive)
 
-## Phase 1: Minimal Working Backend (Fastest Path) - COMPLETED
-## Phase 2: Refactoring & Best Practices - IN PROGRESS
-## Phase 3: UI/UX & Functional Polish - UPDATED
-
-### Authentication & Header
-- [ ] Fix eye button in login.
-- [ ] Replace all occurrences of "Indigo Slate" with "Task Manager".
-- [ ] Improve visibility of username and role next to person icon.
-- [ ] Remove notifications and settings symbols in header.
-- [ ] Implement dropdown menu on user icon:
-    - [ ] Link to Help Center.
-    - [ ] Logout functionality.
-
-### Dashboard & Navigation
-- [ ] In dashboard, remove 'TaskManager' subtitle and search component.
-- [ ] Remove 'New Ticket' from sidebar (should only be in Dashboard and Ticket view).
-- [ ] Remove 'Queue' field in sidebar.
-- [ ] Implement Advanced Filters (Department and Priority).
-
-### Ticket Management
-- [ ] Implement 'Create New Ticket' modal:
-    - [ ] Fields: Title, Description, Department, Priority.
-- [ ] Ticket Actions (3 dots):
-    - [ ] Make logo always visible (not just on hover).
-    - [ ] Implement click action to show Modal: Update Title/Description, Delete ticket (Creator only).
-    - [ ] "Update Ticket" option for Admin/Tech (Status, Priority, Solution).
-- [ ] Ticket Detail/Interaction:
-    - [ ] Allow Technicians to click a ticket and submit a solution.
-    - [ ] Allow Admin/Tech to change Status and Priority.
+### UI Cleanup & Branding
+- [ ] Replace "Indigo Slate" with "Task Manager".
+- [ ] Remove notifications/settings icons from Header.
+- [ ] Sidebar: Remove "Queue" and "New Ticket".
+- [ ] Dashboard: Remove subtitle and search.
+- [ ] Tickets View: Ensure 3-dot icons are always visible.
 - [ ] Remove CSAT score.
-- [ ] **Resolution Velocity** (Admin only, conditional rendering).
+
+### Auth & Navigation
+- [ ] Fix login eye button toggle.
+- [ ] Header: Improve profile text contrast.
+- [ ] User icon dropdown: Help Center and Logout.
+
+### Ticket Interaction
+- [ ] Technicians: Submit solutions via ticket click/action.
+- [ ] All: Set/Update Priority.
+- [ ] Admin/Tech: Update Status, Priority, and Solution.
+- [ ] User: Update/Delete own tickets via 3-dot modal.
+- [ ] Fix Advanced Filters (Department and Priority).
 
 ### User Management (Admin Only)
-- [ ] Implement Create User functionality (Modal):
-    - [ ] Name, Role, Email, Password.
-- [ ] Implement Update User (3 dots actions):
-    - [ ] Update Full Name, Role, Status, and Password.
+- [ ] Create user modal (Name, Role, Email, Password).
+- [ ] Update user modal (Name, Role, Status, Password Reset).
+
+### Department Management (Admin Only)
+- [ ] Fix "Create Department" button functionality.
 
 ### Analytics
-- [ ] **Analytics View**:
-    - [ ] Filtering by date range.
-    - [ ] Technician performance metrics.
+- [ ] Resolution velocity (Admin only).
+- [ ] Technician performance metrics & date filtering.
