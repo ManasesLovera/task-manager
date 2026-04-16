@@ -37,7 +37,7 @@ describe('LoginView Usability & Design', () => {
     renderLogin();
     
     // Check for branding
-    expect(await screen.findByText('Indigo Slate')).toBeInTheDocument();
+    expect(await screen.findByText('Task Manager')).toBeInTheDocument();
     expect(screen.getByText('Welcome back')).toBeInTheDocument();
     
     // Check for form fields
