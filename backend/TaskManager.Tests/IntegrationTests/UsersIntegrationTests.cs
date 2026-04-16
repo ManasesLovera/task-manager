@@ -70,4 +70,69 @@ public class UsersIntegrationTests : IClassFixture<WebApplicationFactory<Program
         Assert.NotNull(users);
         Assert.True(users.Count() >= 2);
     }
+
+    [Fact]
+    public async Task CreateUser_ShouldCreateUser_WhenAdmin()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "Test");
+
+        var request = new CreateUserRequest
+        {
+            Email = "integration@test.com",
+            FullName = "Integration Test",
+            Password = "Password123!",
+            Role = UserRole.Technician
+        };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/users", request);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var user = await response.Content.ReadFromJsonAsync<UserResponse>();
+        Assert.NotNull(user);
+        Assert.Equal(request.Email, user.Email);
+        Assert.Equal("Technician", user.Role);
+    }
+
+    [Fact]
+    public async Task UpdateUser_ShouldUpdateUser_WhenAdmin()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "Test");
+        var userId = "user-to-update";
+
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Users.Add(new ApplicationUser { Id = userId, UserName = "update@test.com", Email = "update@test.com", FullName = "Before Update", Role = UserRole.Member });
+            await db.SaveChangesAsync();
+        }
+
+        var request = new UpdateUserRequest
+        {
+            FullName = "After Update",
+            Role = UserRole.Admin,
+            IsActive = false
+        };
+
+        // Act
+        var response = await client.PutAsJsonAsync($"/api/users/{userId}", request);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var user = await db.Users.FindAsync(userId);
+            Assert.NotNull(user);
+            Assert.Equal("After Update", user.FullName);
+            Assert.Equal(UserRole.Admin, user.Role);
+            Assert.False(user.IsActive);
+        }
+    }
 }

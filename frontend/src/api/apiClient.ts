@@ -34,7 +34,20 @@ export const apiClient = {
       const errorData = await response.json().catch(() => ({}))
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
     }
-    return response.json()
+    return response.status === 204 ? ({} as T) : response.json()
+  },
+
+  async put<T>(endpoint: string, body: unknown): Promise<T> {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: this.getHeaders(),
+      body: JSON.stringify(body),
+    })
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
+    }
+    return response.status === 204 ? ({} as T) : response.json()
   },
 
   async patch<T>(endpoint: string, body: unknown): Promise<T> {
