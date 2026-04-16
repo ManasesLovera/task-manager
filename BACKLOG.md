@@ -1,63 +1,44 @@
 # Technical Backlog & Execution Plan
 
-This document tracks the technical implementation of Phase 3 requirements.
-
 ## Ticket 1: Global UI Cleanup & Branding
 **Branch:** `chore/ui-branding-cleanup`
-**Goal:** Remove deprecated components, fix static branding, and clean up the navigation structures.
-**Execution Plan:**
-1. Global search and replace "Indigo Slate" with "Task Manager" in all frontend files.
-2. Update the `Header` component:
-   - Remove the notification icon.
-3. Update the `Sidebar` navigation:
-   - Remove the "Queue" link.
-   - Remove the "New Ticket" link (so it only remains accessible from Dashboard/Ticket view).
-4. Update the `Dashboard` component:
-   - Remove the "TaskManager" subtitle.
-   - Remove the search input component.
-5. Update `TicketDetail`:
-   - Remove the CSAT score component.
-6. Update `UserManagement`:
-   - Remove the "Add New User" button.
+**Goal:** Remove deprecated components, fix branding, and improve visibility.
+1. Replace "Indigo Slate" with "Task Manager".
+2. Remove notification and settings icons from Header.
+3. Sidebar: Remove "Queue" and "New Ticket".
+4. Dashboard: Remove subtitle and search.
+5. Tickets View: Ensure 3-dot action icons are always visible (remove `opacity-0` or hover-only classes).
+6. Remove CSAT score.
 
-## Ticket 2: Header Profile & Login Form Fixes
+## Ticket 2: Header Profile & Auth Improvements
 **Branch:** `fix/auth-and-header-ui`
-**Goal:** Resolve specific usability bugs in the login form and improve text contrast in the header profile section.
-**Execution Plan:**
-1. Update `Login.tsx`:
-   - Inspect the password input field's "eye" toggle logic. Ensure the state toggles between `password` and `text` input types correctly.
-2. Update `Header` component (Profile Section):
-   - Adjust CSS classes for the username and role text elements next to the avatar. Ensure sufficient contrast against the dark background.
+**Goal:** Fix login bugs and implement the user profile dropdown.
+1. Fix "eye" toggle in `Login.tsx`.
+2. Update Header text contrast for profile name/role.
+3. Implement Dropdown on profile icon: Help Center link, Logout functionality.
 
-## Ticket 3: Ticket Creation Implementation
-**Branch:** `feat/ticket-creation-modal`
-**Goal:** Implement the missing functionality to create new tickets via a dedicated UI modal.
-**Execution Plan:**
-1. Create a `CreateTicketModal.tsx` component.
-   - Include fields for Title, Description, and Department selection.
-2. Integrate the modal into the `Dashboard` and `TicketQueue` components.
-3. Wire the form submission to the existing `POST /api/tickets` backend endpoint.
-4. Add success/error handling (toast notifications).
+## Ticket 3: Ticket Lifecycle & Interaction (Full Stack)
+**Branch:** `feat/ticket-management-v2`
+**Goal:** Enable full ticket CRUD and interaction (Creation, Solution, Priority, Deletion).
+1. **Creation:** Add "Priority" to Create Ticket Modal/Endpoint.
+2. **Detail/Solution:** Enable Technician clicks to open ticket and submit solution.
+3. **Actions:** Implement 3-dot click modal for users (Update Title/Desc, Delete) and Admin/Tech (Update Status/Priority/Solution).
+4. **Backend:** Ensure endpoints support Priority updates and solution submission for Technicians.
 
-## Ticket 4: Help Center View
-**Branch:** `feat/help-center`
-**Goal:** Provide a dedicated view containing guidance on how to use the application.
-**Execution Plan:**
-1. Create a `HelpCenter.tsx` component.
-2. Register the route (e.g., `/help`) in `src/router/index.tsx`.
-3. Update the Header or Sidebar with a "Help Center" link.
+## Ticket 4: Help Center & Filters
+**Branch:** `feat/help-and-filters`
+**Goal:** Implement Help Center and functional Advanced Filters.
+1. Create `HelpCenter.tsx` and route.
+2. Implement Advanced Filters logic in `TicketQueue.tsx` (Filter by Dept and Priority).
 
-## Ticket 5: Analytics and Resolution Metrics (Full Stack)
+## Ticket 5: Analytics and Metrics
 **Branch:** `feat/analytics-and-metrics`
-**Goal:** Build new API endpoints for ticket metrics and implement the corresponding visual components.
-**Execution Plan:**
-**Backend:**
-1. Create `AnalyticsController.cs`.
-2. Implement `GET /api/analytics/resolution-velocity`.
-3. Implement `GET /api/analytics/dashboard` with date range filtering.
-4. Secure endpoints with `Admin` role.
+**Goal:** Metrics and dashboards for Admin.
+1. Backend endpoints for velocity and tech performance.
+2. Frontend Analytics view and velocity component.
 
-**Frontend:**
-1. Create `Analytics` view with date range pickers and performance charts.
-2. Create `ResolutionVelocity` component (Admin only).
-3. Integrate into Dashboard/Sidebar.
+## Ticket 6: Admin User Management
+**Branch:** `feat/admin-user-mgmt`
+**Goal:** Full User CRUD for Admins.
+1. **Create User Modal:** Full name, Role, Email, Password.
+2. **Update User Modal (3 dots):** Update name, role, status, and reset password.
