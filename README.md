@@ -195,6 +195,52 @@ task-manager/
 └── README.md                   # This file
 ```
 
+## Views
+### Dashboard (Admin, Member, Tech)
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/8ae62152-f01a-469a-b707-d43619cdfd2e" />
+
+### Tickets (Admin, Tech) [Member their tickets only]
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/21b97d41-54af-48bc-8c89-788e343c0b3c" />
+
+### Departments (Admin)
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/6f336e6f-899b-41bc-b362-b728c9186ec9" />
+
+### Analytics (Admin)
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/65e112a6-d340-46d9-a628-01cdfcc0aa01" />
+
+### Team (User Management) (Admin)
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/cfc5690b-ee37-43db-9f26-e7ac2daf11f5" />
+
+### Modals
+#### Create Ticket
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/5663f13e-baad-4b86-be70-d5535d935743" />
+
+#### Update Ticket
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/ad0598ca-dcec-479f-8644-907298eda02c" />
+
+#### Add Department
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/9d504f61-7966-4b05-995b-0c820a1c23d8" />
+
+#### Add User
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/ce0c3c45-fb4c-4b3e-8124-caa41aed9c76" />
+
+#### Edit User
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/c515298d-cdcf-4228-839f-b40a84ba2334" />
+
+#### Reset Password
+
+<img width="1909" height="868" alt="image" src="https://github.com/user-attachments/assets/1b9533f6-d1e7-47a5-8ee7-8d0d6759f5a2" />
+
 ## License
 
 This project is developed for educational purposes as part of university coursework.
