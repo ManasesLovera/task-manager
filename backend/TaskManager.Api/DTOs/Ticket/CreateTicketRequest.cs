@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TaskManager.Core.Entities;
 
 namespace TaskManager.Api.DTOs.Ticket;
 
@@ -14,4 +15,7 @@ public class CreateTicketRequest
 
     [Required]
     public Guid DepartmentId { get; set; }
+
+    [Required]
+    public TicketPriority Priority { get; set; } = TicketPriority.Medium;
 }

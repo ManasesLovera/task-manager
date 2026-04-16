@@ -12,6 +12,7 @@ public class TicketResponse
     public string CreatorId { get; set; } = string.Empty;
     public string CreatorName { get; set; } = string.Empty;
     public TicketStatus Status { get; set; }
+    public TicketPriority Priority { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? SolutionDescription { get; set; }
     public string? TechnicianId { get; set; }

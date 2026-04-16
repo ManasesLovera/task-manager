@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
 import { useCreateTicketModal } from '../../stores/createTicketStore';
-import { TicketStatus } from '../../api/types';
-import type { TicketResponse, TicketStatusType } from '../../api/types';
+import { useAuthStore } from '../../stores/authStore';
+import { TicketStatus, TicketPriority } from '../../api/types';
+import type { TicketResponse, TicketStatusType, TicketPriorityType, DepartmentResponse } from '../../api/types';
+import TicketActionModal from './TicketActionModal';
 
 const TicketQueue: React.FC = () => {
+  const { user } = useAuthStore();
   const openModal = useCreateTicketModal((state) => state.open);
+  const [selectedDept, setSelectedDept] = useState<string>('');
+  const [selectedPriority, setSelectedPriority] = useState<string>('');
+  
+  const [actionModalOpen, setActionModalOpen] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<TicketResponse | null>(null);
+
+  const handleOpenAction = (ticket: TicketResponse) => {
+    setSelectedTicket(ticket);
+    setActionModalOpen(true);
+  };
+
   const { data: tickets, isLoading, error } = useQuery({
-    queryKey: ['tickets'],
-    queryFn: () => apiClient.get<TicketResponse[]>('/Tickets'),
+    queryKey: ['tickets', selectedDept, selectedPriority],
+    queryFn: () => {
+      const params = new URLSearchParams();
+      if (selectedDept) params.append('departmentId', selectedDept);
+      if (selectedPriority !== '') params.append('priority', selectedPriority);
+      return apiClient.get<TicketResponse[]>(`/Tickets?${params.toString()}`);
+    },
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ['departments'],
+    queryFn: () => apiClient.get<DepartmentResponse[]>('/Departments'),
   });
 
   const getStatusDetails = (status: TicketStatusType) => {
@@ -37,6 +61,19 @@ const TicketQueue: React.FC = () => {
     }
   };
 
+  const getPriorityDetails = (priority: TicketPriorityType) => {
+    switch (priority) {
+      case TicketPriority.Low:
+        return { label: 'Low', icon: 'low_priority', color: 'text-on-surface-variant' };
+      case TicketPriority.Medium:
+        return { label: 'Medium', icon: 'medium_priority', color: 'text-primary' };
+      case TicketPriority.High:
+        return { label: 'High', icon: 'priority_high', color: 'text-error' };
+      default:
+        return { label: 'Unknown', icon: 'help', color: 'text-gray-400' };
+    }
+  };
+
   if (isLoading) return <div className="p-8 text-center">Loading tickets...</div>;
   if (error) return <div className="p-8 text-center text-error">Error loading tickets: {(error as Error).message}</div>;
 
@@ -49,20 +86,38 @@ const TicketQueue: React.FC = () => {
           <h2 className="text-3xl font-extrabold text-on-surface font-headline leading-tight">Active Ticket Pipeline</h2>
         </div>
         <div className="flex gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-container-lowest border border-outline-variant/10 rounded-xl shadow-sm">
+            <span className="material-symbols-outlined text-on-surface-variant text-sm">hub</span>
+            <select
+              value={selectedDept}
+              onChange={(e) => setSelectedDept(e.target.value)}
+              className="bg-transparent text-xs font-bold text-on-surface-variant outline-none cursor-pointer"
+            >
+              <option value="">All Departments</option>
+              {departments?.map((dept) => (
+                <option key={dept.id} value={dept.id}>{dept.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-container-lowest border border-outline-variant/10 rounded-xl shadow-sm">
+            <span className="material-symbols-outlined text-on-surface-variant text-sm">flag</span>
+            <select
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              className="bg-transparent text-xs font-bold text-on-surface-variant outline-none cursor-pointer"
+            >
+              <option value="">All Priorities</option>
+              <option value={TicketPriority.Low}>Low</option>
+              <option value={TicketPriority.Medium}>Medium</option>
+              <option value={TicketPriority.High}>High</option>
+            </select>
+          </div>
           <button 
             onClick={openModal}
-            className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all ml-2"
           >
             <span className="material-symbols-outlined text-lg">add_circle</span>
             New Ticket
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-surface-container-lowest text-on-surface-variant rounded-xl text-sm font-bold shadow-sm border border-outline-variant/10 hover:bg-surface-container transition-colors">
-            <span className="material-symbols-outlined text-lg">filter_list</span>
-            Advanced Filters
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-surface-container-lowest text-on-surface-variant rounded-xl text-sm font-bold shadow-sm border border-outline-variant/10 hover:bg-surface-container transition-colors">
-            <span className="material-symbols-outlined text-lg">download</span>
-            Export CSV
           </button>
         </div>
       </div>
@@ -95,8 +150,14 @@ const TicketQueue: React.FC = () => {
             <tbody className="divide-y divide-outline-variant/10">
               {tickets?.map((ticket) => {
                 const statusInfo = getStatusDetails(ticket.status);
+                const priorityInfo = getPriorityDetails(ticket.priority);
+                const canOpenAction = user?.role === 'Admin' || user?.role === 'Technician' || user?.id === ticket.creatorId;
                 return (
-                  <tr key={ticket.id} className="hover:bg-surface-container-low/30 transition-colors group cursor-pointer">
+                  <tr 
+                    key={ticket.id} 
+                    onClick={() => canOpenAction && handleOpenAction(ticket)}
+                    className="hover:bg-surface-container-low/30 transition-colors group cursor-pointer"
+                  >
                     <td className="px-6 py-5">
                       <span className="font-manrope font-bold text-primary">#TK-{ticket.id.substring(0, 4)}</span>
                     </td>
@@ -119,13 +180,18 @@ const TicketQueue: React.FC = () => {
                     </td>
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-2">
-                        {/* Priority is not explicitly in the backend TicketResponse, but we can infer it or add it later */}
-                        <span className="material-symbols-outlined text-lg text-on-surface-variant">low_priority</span>
-                        <span className="text-xs font-bold uppercase text-on-surface-variant">Medium</span>
+                        <span className={`material-symbols-outlined text-lg ${priorityInfo.color}`}>{priorityInfo.icon}</span>
+                        <span className={`text-xs font-bold uppercase ${priorityInfo.color}`}>{priorityInfo.label}</span>
                       </div>
                     </td>
                     <td className="px-6 py-5 text-right">
-                      <button className="p-2 hover:bg-primary/10 rounded-lg text-on-surface-variant hover:text-primary transition-all opacity-0 group-hover:opacity-100">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenAction(ticket);
+                        }}
+                        className="p-2 hover:bg-primary/10 rounded-lg text-on-surface-variant hover:text-primary transition-all"
+                      >
                         <span className="material-symbols-outlined">more_vert</span>
                       </button>
                     </td>
@@ -136,6 +202,12 @@ const TicketQueue: React.FC = () => {
           </table>
         </div>
       </div>
+
+      <TicketActionModal 
+        isOpen={actionModalOpen} 
+        onClose={() => setActionModalOpen(false)} 
+        ticket={selectedTicket} 
+      />
     </div>
   );
 };

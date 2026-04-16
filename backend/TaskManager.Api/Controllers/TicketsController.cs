@@ -23,7 +23,10 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TicketResponse>>> GetTickets([FromQuery] Guid? departmentId, [FromQuery] TicketStatus? status)
+    public async Task<ActionResult<IEnumerable<TicketResponse>>> GetTickets(
+        [FromQuery] Guid? departmentId, 
+        [FromQuery] TicketStatus? status,
+        [FromQuery] TicketPriority? priority)
     {
         var userId = _userManager.GetUserId(User);
         var user = await _userManager.FindByIdAsync(userId!);
@@ -49,6 +52,11 @@ public class TicketsController : ControllerBase
         if (status.HasValue)
         {
             query = query.Where(t => t.Status == status.Value);
+        }
+
+        if (priority.HasValue)
+        {
+            query = query.Where(t => t.Priority == priority.Value);
         }
 
         var tickets = await query.OrderByDescending(t => t.CreatedAt).ToListAsync();
@@ -98,6 +106,7 @@ public class TicketsController : ControllerBase
             Title = request.Title,
             Description = request.Description,
             DepartmentId = request.DepartmentId,
+            Priority = request.Priority,
             CreatorId = userId!,
             Status = TicketStatus.Open,
             CreatedAt = DateTime.UtcNow
@@ -113,33 +122,78 @@ public class TicketsController : ControllerBase
         return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, MapToResponse(ticket));
     }
 
-    [HttpPatch("{id}/status")]
-    [Authorize(Roles = "Admin,Technician")]
-    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateTicketStatusRequest request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTicket(Guid id, [FromBody] UpdateTicketRequest request)
     {
+        var userId = _userManager.GetUserId(User);
+        var user = await _userManager.FindByIdAsync(userId!);
+
         var ticket = await _context.Tickets.FindAsync(id);
         if (ticket == null) return NotFound();
 
-        ticket.Status = request.Status;
-        await _context.SaveChangesAsync();
+        // Creators/Members can only edit their own tickets if they are still 'Open'
+        if (user!.Role == UserRole.Member)
+        {
+            if (ticket.CreatorId != userId) return Forbid();
+            if (ticket.Status != TicketStatus.Open) return BadRequest("Only 'Open' tickets can be edited by members.");
 
+            if (request.Title != null) ticket.Title = request.Title;
+            if (request.Description != null) ticket.Description = request.Description;
+            if (request.DepartmentId.HasValue) ticket.DepartmentId = request.DepartmentId.Value;
+        }
+        else // Admin or Technician
+        {
+            if (request.Status.HasValue)
+            {
+                ticket.Status = request.Status.Value;
+                if (ticket.Status == TicketStatus.Resolved)
+                {
+                    ticket.ResolvedAt = DateTime.UtcNow;
+                    ticket.TechnicianId = userId;
+                }
+            }
+
+            if (request.Priority.HasValue) ticket.Priority = request.Priority.Value;
+            if (request.SolutionDescription != null)
+            {
+                ticket.SolutionDescription = request.SolutionDescription;
+                ticket.TechnicianId = userId;
+            }
+
+            // Admins can also edit title/desc if they really want, but usually it's the creator
+            if (user.Role == UserRole.Admin)
+            {
+                if (request.Title != null) ticket.Title = request.Title;
+                if (request.Description != null) ticket.Description = request.Description;
+                if (request.DepartmentId.HasValue) ticket.DepartmentId = request.DepartmentId.Value;
+            }
+        }
+
+        await _context.SaveChangesAsync();
         return NoContent();
     }
 
-    [HttpPatch("{id}/resolve")]
-    [Authorize(Roles = "Admin,Technician")]
-    public async Task<IActionResult> Resolve(Guid id, [FromBody] ResolveTicketRequest request)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTicket(Guid id)
     {
+        var userId = _userManager.GetUserId(User);
+        var user = await _userManager.FindByIdAsync(userId!);
+
         var ticket = await _context.Tickets.FindAsync(id);
         if (ticket == null) return NotFound();
 
-        var userId = _userManager.GetUserId(User);
+        // Only Creator (if Open) or Admin can delete
+        if (user!.Role == UserRole.Member)
+        {
+            if (ticket.CreatorId != userId) return Forbid();
+            if (ticket.Status != TicketStatus.Open) return BadRequest("Only 'Open' tickets can be deleted.");
+        }
+        else if (user.Role != UserRole.Admin)
+        {
+            return Forbid();
+        }
 
-        ticket.Status = TicketStatus.Resolved;
-        ticket.SolutionDescription = request.SolutionDescription;
-        ticket.TechnicianId = userId;
-        ticket.ResolvedAt = DateTime.UtcNow;
-
+        _context.Tickets.Remove(ticket);
         await _context.SaveChangesAsync();
 
         return NoContent();
@@ -157,6 +211,7 @@ public class TicketsController : ControllerBase
             CreatorId = ticket.CreatorId,
             CreatorName = ticket.Creator?.FullName ?? "Unknown",
             Status = ticket.Status,
+            Priority = ticket.Priority,
             CreatedAt = ticket.CreatedAt,
             SolutionDescription = ticket.SolutionDescription,
             TechnicianId = ticket.TechnicianId,
