@@ -7,6 +7,7 @@ import type { AuthResponse } from '../../api/types';
 const LoginView: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -89,22 +90,26 @@ const LoginView: React.FC = () => {
                 </label>
                 <a className="font-label text-xs font-semibold text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
               </div>
-              <div className="relative">
-                <input
-                  className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline"
-                  id="password"
-                  name="password"
-                  placeholder="••••••••••••"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button">
-                  <span className="material-symbols-outlined text-xl">visibility</span>
-                </button>
-              </div>
+               <div className="relative">
+                 <input
+                   className="w-full px-4 py-3 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline"
+                   id="password"
+                   name="password"
+                   placeholder="••••••••••••"
+                   type={showPassword ? 'text' : 'password'}
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}
+                   required
+                   autoComplete="current-password"
+                 />
+                 <button 
+                   className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" 
+                   type="button"
+                   onClick={() => setShowPassword(!showPassword)}
+                 >
+                   <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                 </button>
+               </div>
             </div>
 
             {/* Options */}

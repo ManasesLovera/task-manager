@@ -120,8 +120,8 @@ const MainLayout: React.FC = () => {
             <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
             <div className="flex items-center gap-3 cursor-pointer group">
               <div className="text-right">
-                <p className="text-xs font-bold text-slate-900 leading-none">{user?.fullName}</p>
-                <p className="text-[10px] text-slate-500">{user?.role}</p>
+                 <p className="text-xs font-bold text-slate-900 dark:text-gray-100 leading-none">{user?.fullName}</p>
+                 <p className="text-[10px] text-slate-500 dark:text-gray-300">{user?.role}</p>
               </div>
               <img
                 alt="User profile"
