@@ -48,6 +48,11 @@ export interface CreateTicketRequest {
   departmentId: string;
 }
 
+export interface CreateDepartmentRequest {
+  name: string;
+  code: string;
+}
+
 export interface ResolutionVelocityResponse {
   averageResolutionTimeHours: number;
 }
