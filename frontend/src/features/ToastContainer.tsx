@@ -1,5 +1,6 @@
 import React from 'react';
-import { useToastStore, ToastType } from '../stores/toastStore';
+import { useToastStore } from '../stores/toastStore';
+import type { ToastType } from '../stores/toastStore';
 
 const ToastContainer: React.FC = () => {
   const { toasts, removeToast } = useToastStore();
