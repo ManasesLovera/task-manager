@@ -42,6 +42,12 @@ export interface TicketResponse {
   resolvedAt?: string;
 }
 
+export interface CreateTicketRequest {
+  title: string;
+  description: string;
+  departmentId: string;
+}
+
 export interface ResolutionVelocityResponse {
   averageResolutionTimeHours: number;
 }

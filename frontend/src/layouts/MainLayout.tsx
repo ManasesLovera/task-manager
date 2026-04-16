@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
+import { useCreateTicketModal } from '../stores/createTicketStore';
+import CreateTicketModal from '../features/tickets/CreateTicketModal';
+import ToastContainer from '../features/ToastContainer';
 
 const MainLayout: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { isOpen, open, close } = useCreateTicketModal();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -66,6 +70,17 @@ const MainLayout: React.FC = () => {
             })}
           </nav>
 
+          {/* CTA */}
+          <div className="px-4 mt-8">
+            <button 
+              onClick={open}
+              className="w-full primary-gradient-cta text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-xl shadow-primary/20 hover:opacity-90 transition-opacity"
+            >
+              <span className="material-symbols-outlined text-sm">add_circle</span>
+              New Ticket
+            </button>
+          </div>
+
           {/* Footer Nav */}
           <div className="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 pt-6">
             <a className="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-2.5 mx-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl hover:translate-x-1 transition-transform duration-200" href="#">
@@ -111,6 +126,9 @@ const MainLayout: React.FC = () => {
           <Outlet />
         </div>
       </main>
+
+      <CreateTicketModal isOpen={isOpen} onClose={close} />
+      <ToastContainer />
     </div>
   );
 };
