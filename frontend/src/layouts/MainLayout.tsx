@@ -151,11 +151,11 @@ const MainLayout: React.FC = () => {
 
           {/* Global Footer */}
           <footer className="py-6 px-10 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-200/50 dark:border-slate-800/50 mt-auto">
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">© 2026 Task Manager Enterprise Support. All rights reserved.</p>
+            <p className="font-label text-xs text-on-surface-variant">© 2026 Task Manager Enterprise Support. All rights reserved.</p>
             <nav className="flex gap-6">
-              <a className="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Privacy Policy</a>
-              <a className="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Terms of Service</a>
-              <a className="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Security</a>
+               <a className="font-label text-xs text-on-surface-variant hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Privacy Policy</a>
+               <a className="font-label text-xs text-on-surface-variant hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Terms of Service</a>
+               <a className="font-label text-xs text-on-surface-variant hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Security</a>
             </nav>
           </footer>
         </main>
