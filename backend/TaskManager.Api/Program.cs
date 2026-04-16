@@ -80,9 +80,9 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        if (context.Database.IsRelational() && context.Database.GetPendingMigrations().Any())
+        if (context.Database.IsRelational())
         {
-            context.Database.Migrate();
+            await context.Database.MigrateAsync();
         }
 
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
