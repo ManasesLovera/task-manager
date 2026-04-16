@@ -2,11 +2,13 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
 import { useAuthStore } from '../../stores/authStore';
+import { useCreateTicketModal } from '../../stores/createTicketStore';
 import { TicketStatus } from '../../api/types';
 import type { TicketResponse } from '../../api/types';
 
 const DashboardView: React.FC = () => {
   const user = useAuthStore((state) => state.user);
+  const openModal = useCreateTicketModal((state) => state.open);
   
   const { data: tickets, isLoading } = useQuery({
     queryKey: ['tickets'],
@@ -32,7 +34,10 @@ const DashboardView: React.FC = () => {
               : "You're all caught up! No urgent tickets at the moment."}
           </p>
         </div>
-        <button className="primary-gradient-cta text-white py-4 px-8 rounded-xl font-bold flex items-center gap-3 shadow-xl shadow-primary/20 hover:shadow-2xl hover:translate-y-[-2px] transition-all">
+        <button 
+          onClick={openModal}
+          className="primary-gradient-cta text-white py-4 px-8 rounded-xl font-bold flex items-center gap-3 shadow-xl shadow-primary/20 hover:shadow-2xl hover:translate-y-[-2px] transition-all"
+        >
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>add_circle</span>
           Create New Ticket
         </button>

@@ -1,10 +1,12 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
+import { useCreateTicketModal } from '../../stores/createTicketStore';
 import { TicketStatus } from '../../api/types';
 import type { TicketResponse, TicketStatusType } from '../../api/types';
 
 const TicketQueue: React.FC = () => {
+  const openModal = useCreateTicketModal((state) => state.open);
   const { data: tickets, isLoading, error } = useQuery({
     queryKey: ['tickets'],
     queryFn: () => apiClient.get<TicketResponse[]>('/Tickets'),
@@ -47,6 +49,13 @@ const TicketQueue: React.FC = () => {
           <h2 className="text-3xl font-extrabold text-on-surface font-headline leading-tight">Active Ticket Pipeline</h2>
         </div>
         <div className="flex gap-3">
+          <button 
+            onClick={openModal}
+            className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all"
+          >
+            <span className="material-symbols-outlined text-lg">add_circle</span>
+            New Ticket
+          </button>
           <button className="flex items-center gap-2 px-4 py-2.5 bg-surface-container-lowest text-on-surface-variant rounded-xl text-sm font-bold shadow-sm border border-outline-variant/10 hover:bg-surface-container transition-colors">
             <span className="material-symbols-outlined text-lg">filter_list</span>
             Advanced Filters

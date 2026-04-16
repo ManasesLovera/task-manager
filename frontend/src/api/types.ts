@@ -41,3 +41,9 @@ export interface TicketResponse {
   technicianName?: string;
   resolvedAt?: string;
 }
+
+export interface CreateTicketRequest {
+  title: string;
+  description: string;
+  departmentId: string;
+}
