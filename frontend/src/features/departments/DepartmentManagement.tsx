@@ -2,9 +2,12 @@ import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
 import type { DepartmentResponse } from '../../api/types';
+import { useCreateDepartmentModal } from '../../stores/createDepartmentStore';
+import CreateDepartmentModal from './CreateDepartmentModal';
 
 const DepartmentManagement: React.FC = () => {
   const queryClient = useQueryClient();
+  const { isOpen, open, close } = useCreateDepartmentModal();
   const { data: departments, isLoading, error } = useQuery({
     queryKey: ['departments'],
     queryFn: () => apiClient.get<DepartmentResponse[]>('/Departments'),
@@ -26,7 +29,10 @@ const DepartmentManagement: React.FC = () => {
           <h2 className="text-4xl font-extrabold font-manrope tracking-tight text-on-surface mb-2">Corporate Structure</h2>
           <p className="text-on-surface-variant text-lg">Manage organizational entities, hierarchy, and identification codes for the global enterprise network.</p>
         </div>
-        <button className="primary-gradient-cta text-on-primary font-bold px-6 py-3.5 rounded-xl flex items-center gap-2 shadow-lg hover:shadow-indigo-500/20 transition-all active:scale-95">
+        <button 
+          onClick={open}
+          className="primary-gradient-cta text-on-primary font-bold px-6 py-3.5 rounded-xl flex items-center gap-2 shadow-lg hover:shadow-indigo-500/20 transition-all active:scale-95"
+        >
           <span className="material-symbols-outlined">add_business</span>
           <span>Add New Department</span>
         </button>
@@ -114,6 +120,8 @@ const DepartmentManagement: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      <CreateDepartmentModal isOpen={isOpen} onClose={close} />
     </div>
   );
 };
