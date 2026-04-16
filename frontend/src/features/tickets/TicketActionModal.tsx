@@ -23,12 +23,13 @@ const TicketActionModal: React.FC<TicketActionModalProps> = ({ isOpen, onClose, 
   const queryClient = useQueryClient();
   const addToast = useToastStore((state) => state.addToast);
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [departmentId, setDepartmentId] = useState('');
-  const [status, setStatus] = useState<TicketStatusType>(TicketStatus.Open);
-  const [priority, setPriority] = useState<TicketPriorityType>(TicketPriority.Medium);
-  const [solutionDescription, setSolutionDescription] = useState('');
+  // Form State initialized from ticket directly when possible
+  const [title, setTitle] = useState(ticket?.title || '');
+  const [description, setDescription] = useState(ticket?.description || '');
+  const [departmentId, setDepartmentId] = useState(ticket?.departmentId || '');
+  const [status, setStatus] = useState<TicketStatusType>(ticket?.status ?? TicketStatus.Open);
+  const [priority, setPriority] = useState<TicketPriorityType>(ticket?.priority ?? TicketPriority.Medium);
+  const [solutionDescription, setSolutionDescription] = useState(ticket?.solutionDescription || '');
   const [error, setError] = useState<string | null>(null);
 
   const { data: departments } = useQuery({
@@ -37,8 +38,9 @@ const TicketActionModal: React.FC<TicketActionModalProps> = ({ isOpen, onClose, 
     enabled: isOpen,
   });
 
+  // Sync state with ticket when it changes (e.g. when modal opens with new ticket)
   useEffect(() => {
-    if (ticket) {
+    if (ticket && isOpen) {
       setTitle(ticket.title);
       setDescription(ticket.description);
       setDepartmentId(ticket.departmentId);
@@ -57,7 +59,7 @@ const TicketActionModal: React.FC<TicketActionModalProps> = ({ isOpen, onClose, 
       addToast('Ticket updated successfully', 'success');
       onClose();
     },
-    onError: (err: any) => setError(err.message || 'Update failed'),
+    onError: (err: Error) => setError(err.message || 'Update failed'),
   });
 
   const deleteMutation = useMutation({
@@ -67,7 +69,7 @@ const TicketActionModal: React.FC<TicketActionModalProps> = ({ isOpen, onClose, 
       addToast('Ticket deleted successfully', 'success');
       onClose();
     },
-    onError: (err: any) => setError(err.message || 'Delete failed'),
+    onError: (err: Error) => setError(err.message || 'Delete failed'),
   });
 
   if (!isOpen || !ticket || !user) return null;
