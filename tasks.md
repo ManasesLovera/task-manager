@@ -1,34 +1,16 @@
-# Project Tasks
+# Project Tasks (Remaining)
 
-## Phase 3: UI/UX & Functional Polish (Comprehensive)
-
-### UI Cleanup & Branding
-- [ ] Replace "Indigo Slate" with "Task Manager".
-- [ ] Remove notifications/settings icons from Header.
-- [ ] Sidebar: Remove "Queue" and "New Ticket".
-- [ ] Dashboard: Remove subtitle and search.
-- [ ] Tickets View: Ensure 3-dot icons are always visible.
-- [ ] Remove CSAT score.
-
-### Auth & Navigation
-- [ ] Fix login eye button toggle.
-- [ ] Header: Improve profile text contrast.
-- [ ] User icon dropdown: Help Center and Logout.
-
-### Ticket Interaction
-- [ ] Technicians: Submit solutions via ticket click/action.
-- [ ] All: Set/Update Priority.
-- [ ] Admin/Tech: Update Status, Priority, and Solution.
-- [ ] User: Update/Delete own tickets via 3-dot modal.
-- [ ] Fix Advanced Filters (Department and Priority).
-
-### User Management (Admin Only)
+## User Management
 - [ ] Create user modal (Name, Role, Email, Password).
-- [ ] Update user modal (Name, Role, Status, Password Reset).
+- [ ] Update user modal (Name, Role, Status, Password).
 
-### Department Management (Admin Only)
-- [ ] Fix "Create Department" button functionality.
+## Ticket Workflow
+- [ ] Tech solution submission (Click/Action).
+- [ ] Priority support (Set/Update).
+- [ ] 3-dot visibility and modal actions (Edit/Delete/Update).
+- [ ] Fix Advanced Filters.
 
-### Analytics
-- [ ] Resolution velocity (Admin only).
-- [ ] Technician performance metrics & date filtering.
+## UI/Admin Fixes
+- [ ] Fix 'Create Department' button.
+- [ ] Remove settings icon.
+- [ ] User icon dropdown (Help, Logout).
