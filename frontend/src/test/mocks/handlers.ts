@@ -44,5 +44,17 @@ export const handlers = [
     ]);
   }),
 
-  // Add more handlers as needed
+  // Analytics Mocks
+  http.get(`${API_URL}/analytics/resolution-velocity`, () => {
+    return HttpResponse.json({ averageResolutionTimeHours: 15.5 });
+  }),
+
+  http.get(`${API_URL}/analytics/dashboard`, () => {
+    return HttpResponse.json({
+      technicianPerformances: [
+        { technicianId: 'tech-1', technicianName: 'Tech One', resolvedTicketsCount: 5 },
+        { technicianId: 'tech-2', technicianName: 'Tech Two', resolvedTicketsCount: 3 },
+      ],
+    });
+  }),
 ];
