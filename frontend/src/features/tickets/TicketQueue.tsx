@@ -64,9 +64,9 @@ const TicketQueue: React.FC = () => {
   const getPriorityDetails = (priority: TicketPriorityType) => {
     switch (priority) {
       case TicketPriority.Low:
-        return { label: 'Low', icon: 'low_priority', color: 'text-on-surface-variant' };
+        return { label: 'Low', icon: 'info', color: 'text-on-surface-variant' };
       case TicketPriority.Medium:
-        return { label: 'Medium', icon: 'medium_priority', color: 'text-primary' };
+        return { label: 'Medium', icon: 'flag', color: 'text-primary' };
       case TicketPriority.High:
         return { label: 'High', icon: 'priority_high', color: 'text-error' };
       default:
