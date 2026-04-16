@@ -45,7 +45,7 @@ const LoginView: React.FC = () => {
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center atmospheric-shadow">
               <span className="material-symbols-outlined text-on-primary">task_alt</span>
             </div>
-            <span className="font-headline text-2xl font-black tracking-tight text-primary">Indigo Slate</span>
+            <span className="font-headline text-2xl font-black tracking-tight text-primary">Task Manager</span>
           </div>
           <h1 className="font-headline text-3xl font-extrabold tracking-tight text-on-surface mb-2">Welcome back</h1>
           <p className="font-body text-on-surface-variant">Sign in to manage your productivity dashboard</p>
@@ -127,7 +127,7 @@ const LoginView: React.FC = () => {
           {/* Footer Action */}
           <div className="mt-8 pt-6 border-t border-outline-variant/10 text-center">
             <p className="font-body text-sm text-on-surface-variant">
-              New to TaskManager? 
+              New to Task Manager? 
               <a className="font-semibold text-primary hover:text-primary-container transition-colors ml-1" href="#">Request access</a>
             </p>
           </div>

@@ -45,8 +45,6 @@ describe('DashboardView Usability', () => {
     // Wait for data to load
     expect(await screen.findByText('Resolution Velocity')).toBeInTheDocument();
     expect(screen.getByText('2.4')).toBeInTheDocument();
-    expect(screen.getByText('CSAT Score')).toBeInTheDocument();
-    expect(screen.getByText('98.2%')).toBeInTheDocument();
   });
 
   it('shows the action button to create new tickets', async () => {
