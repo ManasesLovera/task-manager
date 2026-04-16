@@ -6,6 +6,23 @@ export interface UserResponse {
   isActive: boolean;
 }
 
+export interface CreateUserRequest {
+  email: string;
+  fullName: string;
+  role: 'Admin' | 'Technician' | 'Member';
+  password?: string;
+}
+
+export interface UpdateUserRequest {
+  fullName: string;
+  role: 'Admin' | 'Technician' | 'Member';
+  isActive: boolean;
+}
+
+export interface ResetPasswordRequest {
+  newPassword: string;
+}
+
 export interface AuthResponse {
   token: string;
   expiration: string;
@@ -65,6 +82,11 @@ export interface UpdateTicketRequest {
   status?: TicketStatusType;
   priority?: TicketPriorityType;
   solutionDescription?: string;
+}
+
+export interface CreateDepartmentRequest {
+  name: string;
+  code: string;
 }
 
 export interface ResolutionVelocityResponse {

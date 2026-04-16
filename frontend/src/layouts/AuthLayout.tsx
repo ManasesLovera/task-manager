@@ -14,7 +14,7 @@ const AuthLayout: React.FC = () => {
 
       {/* Footer Utility */}
       <footer className="py-6 px-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-surface-container-low border-t border-outline-variant/10">
-        <p className="font-label text-xs text-on-surface-variant">© 2024 Task Manager Enterprise Support. All rights reserved.</p>
+        <p className="font-label text-xs text-on-surface-variant">© 2026 Task Manager Enterprise Support. All rights reserved.</p>
         <nav className="flex gap-6">
           <a className="font-label text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
           <a className="font-label text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>

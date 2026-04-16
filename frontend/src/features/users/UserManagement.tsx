@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
 import type { UserResponse } from '../../api/types';
+import AddUserModal from './AddUserModal';
+import EditUserModal from './EditUserModal';
+import ResetPasswordModal from './ResetPasswordModal';
 
 const UserManagement: React.FC = () => {
   const queryClient = useQueryClient();
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserResponse | null>(null);
+  const [openActionMenuId, setOpenActionMenuId] = useState<string | null>(null);
+
   const { data: users, isLoading, error } = useQuery({
     queryKey: ['users'],
     queryFn: () => apiClient.get<UserResponse[]>('/Users'),
@@ -17,6 +26,18 @@ const UserManagement: React.FC = () => {
 
   if (isLoading) return <div className="p-8 text-center">Loading team members...</div>;
   if (error) return <div className="p-8 text-center text-error">Error loading team: {(error as Error).message}</div>;
+
+  const handleEditClick = (user: UserResponse) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
+    setOpenActionMenuId(null);
+  };
+
+  const handleResetPasswordClick = (user: UserResponse) => {
+    setSelectedUser(user);
+    setIsResetModalOpen(true);
+    setOpenActionMenuId(null);
+  };
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -31,6 +52,13 @@ const UserManagement: React.FC = () => {
           <h2 className="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">Team Members</h2>
           <p className="text-on-surface-variant max-w-xl leading-relaxed">Manage your organization's workforce, adjust permissions, and monitor active account statuses from a centralized hub.</p>
         </div>
+        <button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:translate-y-[-2px] transition-all"
+        >
+          <span className="material-symbols-outlined">person_add</span>
+          Add New User
+        </button>
       </div>
 
       {/* Stats Bar (Bento-lite) */}
@@ -65,7 +93,7 @@ const UserManagement: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[400px]">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container-low/30">
@@ -108,10 +136,32 @@ const UserManagement: React.FC = () => {
                       <span className={`inline-block h-4 w-4 rounded-full bg-white transition shadow-sm ${user.isActive ? 'translate-x-6' : 'translate-x-1'}`}></span>
                     </button>
                   </td>
-                  <td className="px-8 py-5 text-right">
-                    <button className="text-on-surface-variant hover:text-primary transition-colors">
+                  <td className="px-8 py-5 text-right relative">
+                    <button 
+                      onClick={() => setOpenActionMenuId(openActionMenuId === user.id ? null : user.id)}
+                      className="p-2 text-on-surface-variant hover:text-primary hover:bg-primary/5 rounded-full transition-colors"
+                    >
                       <span className="material-symbols-outlined">more_vert</span>
                     </button>
+                    
+                    {openActionMenuId === user.id && (
+                      <div className="absolute right-8 top-12 w-48 bg-surface-container-lowest border border-outline-variant/20 rounded-xl shadow-xl z-10 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                        <button 
+                          onClick={() => handleEditClick(user)}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface hover:bg-surface-container transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-lg">edit</span>
+                          Edit Details
+                        </button>
+                        <button 
+                          onClick={() => handleResetPasswordClick(user)}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface hover:bg-surface-container transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-lg">lock_reset</span>
+                          Reset Password
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -119,8 +169,41 @@ const UserManagement: React.FC = () => {
           </table>
         </div>
       </section>
+
+      {/* Modals */}
+      <AddUserModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+      />
+      <EditUserModal 
+        key={selectedUser ? `edit-${selectedUser.id}` : 'edit-none'}
+        isOpen={isEditModalOpen} 
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedUser(null);
+        }} 
+        user={selectedUser}
+      />
+      <ResetPasswordModal 
+        key={selectedUser ? `reset-${selectedUser.id}` : 'reset-none'}
+        isOpen={isResetModalOpen} 
+        onClose={() => {
+          setIsResetModalOpen(false);
+          setSelectedUser(null);
+        }} 
+        user={selectedUser}
+      />
+
+      {/* Click outside backdrop for menu */}
+      {openActionMenuId && (
+        <div 
+          className="fixed inset-0 z-0" 
+          onClick={() => setOpenActionMenuId(null)}
+        />
+      )}
     </div>
   );
 };
 
 export default UserManagement;
+
