@@ -38,19 +38,6 @@ const TicketActionModal: React.FC<TicketActionModalProps> = ({ isOpen, onClose, 
     enabled: isOpen,
   });
 
-  // Sync state with ticket when it changes (e.g. when modal opens with new ticket)
-  useEffect(() => {
-    if (ticket && isOpen) {
-      setTitle(ticket.title);
-      setDescription(ticket.description);
-      setDepartmentId(ticket.departmentId);
-      setStatus(ticket.status);
-      setPriority(ticket.priority);
-      setSolutionDescription(ticket.solutionDescription || '');
-      setError(null);
-    }
-  }, [ticket, isOpen]);
-
   const updateMutation = useMutation({
     mutationFn: (update: UpdateTicketRequest) => 
       apiClient.put(`/Tickets/${ticket?.id}`, update),

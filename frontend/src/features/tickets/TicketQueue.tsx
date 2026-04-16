@@ -204,6 +204,7 @@ const TicketQueue: React.FC = () => {
       </div>
 
       <TicketActionModal 
+        key={selectedTicket?.id || 'new'}
         isOpen={actionModalOpen} 
         onClose={() => setActionModalOpen(false)} 
         ticket={selectedTicket} 

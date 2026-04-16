@@ -76,8 +76,9 @@ public class TicketsIntegrationTests : IClassFixture<WebApplicationFactory<Progr
         response.EnsureSuccessStatusCode();
         var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<TicketResponse>>();
         Assert.NotNull(tickets);
-        Assert.Single(tickets);
-        Assert.Equal(TicketPriority.High, tickets.First().Priority);
+        var ticketList = tickets.ToList();
+        Assert.Single(ticketList);
+        Assert.Equal(TicketPriority.High, ticketList.First().Priority);
     }
 
     [Fact]
@@ -112,6 +113,7 @@ public class TicketsIntegrationTests : IClassFixture<WebApplicationFactory<Progr
         {
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var ticket = await db.Tickets.FindAsync(ticketId);
+            Assert.NotNull(ticket);
             Assert.Equal(TicketStatus.Pending, ticket.Status);
             Assert.Equal(TicketPriority.Low, ticket.Priority);
             Assert.Equal("Some solution", ticket.SolutionDescription);
