@@ -26,8 +26,8 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({ isOpen, onClose
       setConfirmPassword('');
       onClose();
     },
-    onError: (err: any) => {
-      setError(err.response?.data?.[0]?.description || err.message || 'Failed to reset password');
+    onError: (err: Error) => {
+      setError(err.message || 'Failed to reset password');
     },
   });
 

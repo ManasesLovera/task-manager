@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../api/apiClient';
 import { useToastStore } from '../../stores/toastStore';
@@ -11,21 +11,13 @@ interface EditUserModalProps {
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) => {
-  const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState<'Admin' | 'Technician' | 'Member'>('Member');
-  const [isActive, setIsActive] = useState(true);
+  const [fullName, setFullName] = useState(user?.fullName || '');
+  const [role, setRole] = useState<'Admin' | 'Technician' | 'Member'>(user?.role || 'Member');
+  const [isActive, setIsActive] = useState(user?.isActive ?? true);
   const [error, setError] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
   const addToast = useToastStore((state) => state.addToast);
-
-  useEffect(() => {
-    if (user) {
-      setFullName(user.fullName);
-      setRole(user.role);
-      setIsActive(user.isActive);
-    }
-  }, [user]);
 
   const updateUserMutation = useMutation({
     mutationFn: (updateData: UpdateUserRequest) => 
@@ -35,8 +27,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) 
       addToast('User updated successfully!', 'success');
       onClose();
     },
-    onError: (err: any) => {
-      setError(err.response?.data?.[0]?.description || err.message || 'Failed to update user');
+    onError: (err: Error) => {
+      setError(err.message || 'Failed to update user');
     },
   });
 
@@ -107,7 +99,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) 
               <select
                 id="edit-role"
                 value={role}
-                onChange={(e) => setRole(e.target.value as any)}
+                onChange={(e) => setRole(e.target.value as UserResponse['role'])}
                 className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-on-surface appearance-none"
               >
                 <option value="Member">Member</option>

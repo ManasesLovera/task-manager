@@ -28,8 +28,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
       resetForm();
       onClose();
     },
-    onError: (err: any) => {
-      setError(err.response?.data?.[0]?.description || err.message || 'Failed to create user');
+    onError: (err: Error) => {
+      setError(err.message || 'Failed to create user');
     },
   });
 
@@ -123,7 +123,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose }) => {
               <select
                 id="role"
                 value={role}
-                onChange={(e) => setRole(e.target.value as any)}
+                onChange={(e) => setRole(e.target.value as CreateUserRequest['role'])}
                 className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-on-surface appearance-none"
               >
                 <option value="Member">Member</option>

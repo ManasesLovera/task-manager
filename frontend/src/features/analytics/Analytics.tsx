@@ -14,7 +14,7 @@ const Analytics: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = React.useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -37,13 +37,13 @@ const Analytics: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [startDate, endDate]);
 
   useEffect(() => {
     if (user?.role === 'Admin') {
       fetchAnalytics();
     }
-  }, [startDate, endDate]);
+  }, [fetchAnalytics, user?.role]);
 
   if (user?.role !== 'Admin') {
     return <Navigate to="/" replace />;

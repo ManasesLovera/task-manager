@@ -176,6 +176,7 @@ const UserManagement: React.FC = () => {
         onClose={() => setIsAddModalOpen(false)} 
       />
       <EditUserModal 
+        key={selectedUser ? `edit-${selectedUser.id}` : 'edit-none'}
         isOpen={isEditModalOpen} 
         onClose={() => {
           setIsEditModalOpen(false);
@@ -184,6 +185,7 @@ const UserManagement: React.FC = () => {
         user={selectedUser}
       />
       <ResetPasswordModal 
+        key={selectedUser ? `reset-${selectedUser.id}` : 'reset-none'}
         isOpen={isResetModalOpen} 
         onClose={() => {
           setIsResetModalOpen(false);
