@@ -83,10 +83,13 @@ const MainLayout: React.FC = () => {
 
           {/* Footer Nav */}
           <div className="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 pt-6">
-            <a className="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-2.5 mx-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl hover:translate-x-1 transition-transform duration-200" href="#">
+            <Link
+              className="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-2.5 mx-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl hover:translate-x-1 transition-transform duration-200"
+              to="/help"
+            >
               <span className="material-symbols-outlined">help</span>
               <span>Help Center</span>
-            </a>
+            </Link>
             <button
               onClick={() => logout()}
               className="w-[calc(100%-32px)] flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-2.5 mx-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-xl hover:translate-x-1 transition-transform duration-200"
