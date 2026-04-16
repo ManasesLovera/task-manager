@@ -22,7 +22,6 @@ const MainLayout: React.FC = () => {
     { label: 'Tickets', icon: 'confirmation_number', path: '/tickets' },
     ...(isAdmin ? [
       { label: 'Departments', icon: 'domain', path: '/departments' },
-      { label: 'Queues', icon: 'view_list', path: '/queues' },
       { label: 'Analytics', icon: 'analytics', path: '/analytics' },
       { label: 'Team', icon: 'group', path: '/team' },
     ] : []),
@@ -39,7 +38,7 @@ const MainLayout: React.FC = () => {
               <span className="material-symbols-outlined text-white" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard_customize</span>
             </div>
             <div>
-              <h1 className="font-black text-indigo-700 dark:text-indigo-400 text-lg leading-tight">Indigo Slate</h1>
+              <h1 className="font-black text-indigo-700 dark:text-indigo-400 text-lg leading-tight">Task Manager</h1>
               <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Enterprise Support</p>
             </div>
           </div>
@@ -67,14 +66,6 @@ const MainLayout: React.FC = () => {
             })}
           </nav>
 
-          {/* CTA */}
-          <div className="px-4 mt-8">
-            <button className="w-full primary-gradient-cta text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-xl shadow-primary/20 hover:opacity-90 transition-opacity">
-              <span className="material-symbols-outlined text-sm">add_circle</span>
-              New Ticket
-            </button>
-          </div>
-
           {/* Footer Nav */}
           <div className="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 pt-6">
             <Link
@@ -98,33 +89,16 @@ const MainLayout: React.FC = () => {
       {/* Main Content Area */}
       <main className="ml-64 min-h-screen">
         {/* TopAppBar */}
-        <header className="w-full sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 px-8 py-3 flex justify-between items-center shadow-sm dark:shadow-none">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50 font-manrope">TaskManager</span>
-            </div>
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-3 text-slate-400 text-lg">search</span>
-              <input
-                className="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm w-80 focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400 transition-all"
-                placeholder="Search tickets, agents, or knowledge..."
-                type="text"
-              />
-            </div>
-          </div>
+        <header className="w-full sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 px-8 py-3 flex justify-end items-center shadow-sm dark:shadow-none">
           <div className="flex items-center gap-4">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 transition-colors relative">
-              <span className="material-symbols-outlined">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
-            </button>
             <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 transition-colors">
               <span className="material-symbols-outlined">settings</span>
             </button>
             <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
             <div className="flex items-center gap-3 cursor-pointer group">
               <div className="text-right">
-                <p className="text-xs font-bold text-slate-900 leading-none">{user?.fullName}</p>
-                <p className="text-[10px] text-slate-500">{user?.role}</p>
+                 <p className="text-xs font-bold text-slate-900 dark:text-gray-100 leading-none">{user?.fullName}</p>
+                 <p className="text-[10px] text-slate-500 dark:text-gray-300">{user?.role}</p>
               </div>
               <img
                 alt="User profile"

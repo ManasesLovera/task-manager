@@ -41,3 +41,17 @@ export interface TicketResponse {
   technicianName?: string;
   resolvedAt?: string;
 }
+
+export interface ResolutionVelocityResponse {
+  averageResolutionTimeHours: number;
+}
+
+export interface TechnicianPerformance {
+  technicianId: string;
+  technicianName: string;
+  resolvedTicketsCount: number;
+}
+
+export interface DashboardAnalyticsResponse {
+  technicianPerformances: TechnicianPerformance[];
+}
