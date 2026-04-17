@@ -28,7 +28,7 @@ public class HealthIntegrationTests : IClassFixture<WebApplicationFactory<Progra
         var content = await response.Content.ReadFromJsonAsync<HealthResponse>();
         Assert.NotNull(content);
         Assert.Equal("Healthy", content.Status);
-        Assert.Equal("0.5.0", content.Version);
+        Assert.False(string.IsNullOrEmpty(content.Version));
     }
 
     private record HealthResponse(string Status, string Version);

@@ -74,25 +74,28 @@ var app = builder.Build();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Apply migrations and seed at startup
-using (var scope = app.Services.CreateScope())
+if (app.Environment.EnvironmentName != "IntegrationTesting")
 {
-    var services = scope.ServiceProvider;
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        var context = services.GetRequiredService<ApplicationDbContext>();
-        if (context.Database.IsRelational())
+        var services = scope.ServiceProvider;
+        try
         {
-            await context.Database.MigrateAsync();
-        }
+            var context = services.GetRequiredService<ApplicationDbContext>();
+            if (context.Database.IsRelational())
+            {
+                await context.Database.MigrateAsync();
+            }
 
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        await DbInitializer.SeedData(userManager, roleManager, context);
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            await DbInitializer.SeedData(userManager, roleManager, context);
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+        }
     }
 }
 
