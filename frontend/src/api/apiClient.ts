@@ -1,6 +1,6 @@
 import { useAuthStore } from '../stores/authStore'
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-production-d587.up.railway.app/api'
 
 export const apiClient = {
   getHeaders(): HeadersInit {
